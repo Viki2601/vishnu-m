@@ -91,6 +91,14 @@ body {
   background: rgba(255, 255, 255, 0.22);
 }
 
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /*  Dot-Grid Background  */
 .bg-dots {
   background-image: radial-gradient(circle, rgba(255, 255, 255, 0.38) 1px, transparent 1px);
@@ -270,7 +278,7 @@ h6 {
   background: var(--surface);
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
   z-index: 100;
-  display: flex;
+  /* display intentionally omitted — Tailwind hidden/xl:flex controls it */
   flex-direction: column;
   padding: 2rem 1.5rem;
   gap: 1rem;

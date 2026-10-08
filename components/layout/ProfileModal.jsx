@@ -25,7 +25,7 @@ export default function ProfileModal({ open, onClose }) {
 
     return createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-2" style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)' }} onClick={onClose}>
-            <div role="dialog" aria-modal="true" aria-labelledby="profile-modal-title" data-lenis-prevent onClick={(e) => e.stopPropagation()} className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl p-5" style={{ background: 'var(--chalk)', color: 'var(--canvas)' }}>
+            <div role="dialog" aria-modal="true" aria-labelledby="profile-modal-title" data-lenis-prevent onClick={(e) => e.stopPropagation()} className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto no-scrollbar rounded-3xl p-5" style={{ background: 'var(--chalk)', color: 'var(--canvas)' }}>
                 {/* ── Diagonal cross-hatch pattern — top-right corner ─────── */}
                 <div aria-hidden="true" style={{ position: 'absolute', top: 0, right: 0, width: '55%', height: '240px', borderRadius: '0 1.5rem 0 0', overflow: 'hidden', pointerEvents: 'none', }}>
                     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', inset: 0 }}>
