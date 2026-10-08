@@ -1,0 +1,403 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*  CSS Custom Properties — Black Theme  */
+:root {
+  /* Canvas / surfaces */
+  --canvas: #0A0A0A;
+  --surface: #141414;
+  --surface-alt: #1C1C1C;
+  --border: #2A2A2A;
+
+  /* Text */
+  --chalk: #F0EDE8;
+  /* primary text — off-white "chalk" */
+  --muted: #888888;
+  /* secondary text */
+  --ink: #F0EDE8;
+  /* alias kept for backward-compat */
+
+  /* Note colours — vivid so they pop on black */
+  --note-pink: #FF85B3;
+  --note-mint: #5EFFA0;
+  --note-sky: #5ECFFF;
+  --note-butter: #FFE566;
+  --note-lilac: #C084FF;
+  --note-peach: #FF8C7A;
+  --note-beige: #E8DFD0;
+  --note-white: #F5F2EE;
+
+  /* Accents */
+  --accent-purple: #A855F7;
+  --accent-red: #F87171;
+  --accent-green: #4ADE80;
+
+  /* Shadows */
+  --shadow-note: 0 2px 12px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-note-lift: 0 8px 32px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-dock: 0 8px 32px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  /* Layout */
+  --sidebar-w: 300px;
+  --scrollbar-w: 6px;
+}
+
+/*  Base Reset  */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--chalk);
+  font-family: var(--font-caveat), cursive;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+@media (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+}
+
+/*  Scrollbar  */
+::-webkit-scrollbar {
+  width: var(--scrollbar-w);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/*  Dot-Grid Background  */
+.bg-dots {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.38) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/*  Sticky Note Base Styles  */
+.sticky-note {
+  border-radius: 3px;
+  box-shadow: var(--shadow-note);
+  padding: 1.25rem;
+  position: relative;
+  overflow: visible;
+  will-change: transform;
+  user-select: none;
+  /* Notes use dark text on vivid colour backgrounds */
+  color: #111111;
+}
+
+.sticky-note::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.sticky-note:hover {
+  box-shadow: var(--shadow-note-lift);
+}
+
+/*  Typography  */
+/* Headings use Caveat */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-caveat), cursive;
+}
+
+.font-display {
+  font-family: var(--font-caveat), cursive;
+}
+
+.font-mono-viki {
+  font-family: var(--font-space-mono), monospace;
+}
+
+.font-hand {
+  font-family: var(--font-reenie), cursive;
+}
+
+/*  Section Title  */
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.section-title-line {
+  height: 2px;
+  background: rgba(240, 237, 232, 0.2);
+  border-radius: 99px;
+  width: 0;
+  transform-origin: center;
+  flex: 0 0 60px;
+}
+
+/*  Tool Card  */
+.tool-card {
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 0.5rem;
+  background: var(--surface);
+  color: var(--chalk);
+  /* GSAP owns the scale — only keep border/shadow transitions here */
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: default;
+  will-change: transform;
+}
+
+.tool-card:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+}
+
+/*  Dock  */
+.dock-bar {
+  background: rgba(20, 20, 20, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  box-shadow: var(--shadow-dock);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/*  Custom Cursor  */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--chalk);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(240, 237, 232, 0.5);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  opacity: 0.5;
+  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+}
+
+.cursor-ring.hover {
+  width: 56px;
+  height: 56px;
+  opacity: 0.12;
+  background: var(--chalk);
+}
+
+/*  Loader  */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--canvas);
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/*  Focus rings (a11y)  */
+:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/*  Sidebar  */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  background: var(--surface);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  gap: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 1px solid var(--border);
+}
+
+/*  Main canvas  */
+.main-canvas {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 6rem;
+}
+
+/*  Project card  */
+.project-card {
+  transform-style: preserve-3d;
+  perspective: 600px;
+}
+
+/*  Badge  */
+.built-badge {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 500;
+  font-family: var(--font-space-mono), monospace;
+  white-space: nowrap;
+}
+
+/*  Tech chip / pill  */
+.tech-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  font-size: 0.7rem;
+  font-family: var(--font-space-mono), monospace;
+  letter-spacing: 0.04em;
+  background: var(--surface-alt);
+  color: var(--chalk);
+  white-space: nowrap;
+}
+
+/*  Toast  */
+.toast {
+  position: fixed;
+  bottom: 5.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--chalk);
+  color: var(--canvas);
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.85rem;
+  font-family: var(--font-space-mono), monospace;
+  z-index: 8000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/*  Utilities  */
+.text-muted {
+  color: var(--muted);
+}
+
+.dragging {
+  z-index: 1000 !important;
+  cursor: grabbing !important;
+}
+
+.polaroid-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 52px;
+  height: 18px;
+  background: rgba(255, 229, 102, 0.45);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+/*  Reduced-motion overrides  */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+
+  body {
+    cursor: auto !important;
+  }
+}
+
+/*  Detail page outline button hover  */
+.detail-btn-outline:hover {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/*  Related project card hover lift  */
+.related-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}

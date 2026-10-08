@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#FAFAF8"/>
+  <!-- Dot grid (simplified) -->
+  <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="1" cy="1" r="1" fill="#c4b5d0" opacity="0.4"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- Sticky note accent -->
+  <rect x="80" y="120" width="260" height="160" rx="3" fill="#CDB4FF" transform="rotate(-2, 80, 120)"/>
+  <rect x="860" y="80" width="220" height="140" rx="3" fill="#BFFFC9" transform="rotate(2, 860, 80)"/>
+  <rect x="900" y="400" width="200" height="130" rx="3" fill="#FFC2DD" transform="rotate(-1, 900, 400)"/>
+  <rect x="60" y="400" width="240" height="150" rx="3" fill="#FFF3B0" transform="rotate(2, 60, 400)"/>
+
+  <!-- Main text -->
+  <text x="600" y="270" font-family="Georgia,serif" font-size="80" font-weight="900" fill="#1A1A2E" text-anchor="middle">hey, I'm Viki</text>
+  <text x="600" y="340" font-family="monospace" font-size="22" font-weight="bold" fill="#4A4A6A" text-anchor="middle" letter-spacing="6">FRONTEND DEVELOPER · UI BUILDER · MOTION NERD</text>
+  <text x="600" y="400" font-family="Georgia,serif" font-size="20" fill="#7C3AED" text-anchor="middle">Chennai, India — Next.js · GSAP · React</text>
+</svg>
