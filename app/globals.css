@@ -5,38 +5,41 @@
 /*  CSS Custom Properties — Black Theme  */
 :root {
   /* Canvas / surfaces */
-  --canvas: #0A0A0A;
+  --canvas: #0a0a0a;
   --surface: #141414;
-  --surface-alt: #1C1C1C;
-  --border: #2A2A2A;
+  --surface-alt: #1c1c1c;
+  --border: #2a2a2a;
 
   /* Text */
-  --chalk: #F0EDE8;
+  --chalk: #f0ede8;
   /* primary text — off-white "chalk" */
   --muted: #888888;
   /* secondary text */
-  --ink: #F0EDE8;
+  --ink: #f0ede8;
   /* alias kept for backward-compat */
 
   /* Note colours — vivid so they pop on black */
-  --note-pink: #FF85B3;
-  --note-mint: #5EFFA0;
-  --note-sky: #5ECFFF;
-  --note-butter: #FFE566;
-  --note-lilac: #C084FF;
-  --note-peach: #FF8C7A;
-  --note-beige: #E8DFD0;
-  --note-white: #F5F2EE;
+  --note-pink: #ff85b3;
+  --note-mint: #5effa0;
+  --note-sky: #5ecfff;
+  --note-butter: #ffe566;
+  --note-lilac: #c084ff;
+  --note-peach: #ff8c7a;
+  --note-beige: #e8dfd0;
+  --note-white: #f5f2ee;
 
   /* Accents */
-  --accent-purple: #A855F7;
-  --accent-red: #F87171;
-  --accent-green: #4ADE80;
+  --accent-purple: #a855f7;
+  --accent-red: #f87171;
+  --accent-green: #4ade80;
 
   /* Shadows */
   --shadow-note: 0 2px 12px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-note-lift: 0 8px 32px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.5);
-  --shadow-dock: 0 8px 32px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-note-lift:
+    0 8px 32px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-dock:
+    0 8px 32px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
   /* Layout */
   --sidebar-w: 300px;
@@ -101,7 +104,11 @@ body {
 
 /*  Dot-Grid Background  */
 .bg-dots {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.38) 1px, transparent 1px);
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.38) 1px,
+    transparent 1px
+  );
   background-size: 24px 24px;
 }
 
@@ -119,7 +126,7 @@ body {
 }
 
 .sticky-note::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -8px;
   left: 50%;
@@ -176,27 +183,18 @@ h6 {
   flex: 0 0 60px;
 }
 
-/*  Tool Card  */
+/*  Tool Card — 3D perspective container                                 */
+/*  Visual chrome (bg, border, shadow) lives in the inner bg-plate div. */
 .tool-card {
-  border: 1.5px solid var(--border);
   border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  padding: 0.75rem 0.5rem;
-  background: var(--surface);
-  color: var(--chalk);
-  /* GSAP owns the scale — only keep border/shadow transitions here */
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  display: block;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
   cursor: default;
   will-change: transform;
-}
-
-.tool-card:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+  overflow: visible;
 }
 
 /*  Dock  */
@@ -237,7 +235,11 @@ h6 {
   transform: translate(-50%, -50%);
   will-change: transform;
   opacity: 0.5;
-  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+  transition:
+    width 0.2s ease,
+    height 0.2s ease,
+    opacity 0.2s ease,
+    background 0.2s ease;
 }
 
 .cursor-ring.hover {
@@ -275,8 +277,9 @@ h6 {
   position: sticky;
   top: 0;
   flex-shrink: 0;
-  background: var(--surface);
+  background: #00000005;
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
   z-index: 100;
   /* display intentionally omitted — Tailwind hidden/xl:flex controls it */
   flex-direction: column;
@@ -336,8 +339,8 @@ h6 {
 .toast {
   position: fixed;
   bottom: 5.5rem;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
+  right: 0%;
+  transform: translateX(50%) translateY(50px);
   background: var(--chalk);
   color: var(--canvas);
   border-radius: 999px;
@@ -347,12 +350,14 @@ h6 {
   z-index: 8000;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 .toast.visible {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-5%) translateY(25px);
 }
 
 /*  Utilities  */
@@ -380,7 +385,6 @@ h6 {
 
 /*  Reduced-motion overrides  */
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {

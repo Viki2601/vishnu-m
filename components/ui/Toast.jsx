@@ -6,7 +6,7 @@
  * Usage: import { useToast } from './Toast'; const { showToast } = useToast();
  */
 
-import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { createContext, useContext, useState, useCallback, } from 'react';
 const ToastContext = createContext(null);
 
 export function ToastProvider({ children }) {

@@ -35,7 +35,7 @@ export default function MobileHeader() {
           </div>
 
           {/* Say Hi CTA */}
-          <a href={`mailto:${profile?.email}`} className="flex-shrink-0 rounded-lg py-1.5 px-3 font-mono text-[0.65rem] font-bold tracking-wider uppercase transition-colors focus-visible:ring-2 focus-visible:ring-accent-purple" style={{ background: 'var(--chalk)', color: 'var(--canvas)' }} aria-label="Send email">
+          <a href={`https://wa.me/${profile?.whatsapp}?text=${encodeURIComponent(profile?.whatsappMessage)}`} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 rounded-lg py-1.5 px-3 font-mono text-[0.65rem] font-bold tracking-wider uppercase transition-colors focus-visible:ring-2 focus-visible:ring-accent-purple" style={{ background: 'var(--chalk)', color: 'var(--canvas)' }} aria-label="Message me on WhatsApp">
             Say Hi
           </a>
         </div>

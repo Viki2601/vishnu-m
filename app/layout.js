@@ -76,6 +76,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import MobileHeader from "@/components/layout/MobileHeader";
 import Dock from "@/components/layout/Dock";
 import Cursor from "@/components/layout/Cursor";
+import CursorDotHighlight from "@/components/layout/CursorDotHighlight";
 import { ToastProvider } from "@/components/ui/Toast";
 import AppShell from "./AppShell";
 
@@ -89,8 +90,10 @@ export default function RootLayout({ children }) {
           <SmoothScrollProvider>
             {/* App shell handles Loader + page transition */}
             <AppShell>
-              {/* Dot-grid background */}
+              {/* Dot-grid background — base white dots */}
               <div className="fixed inset-0 bg-dots pointer-events-none" style={{ opacity: 0.35, zIndex: 0 }} aria-hidden="true" />
+              {/* Red dot spotlight — follows cursor */}
+              <CursorDotHighlight />
               {/* Layout: sidebar + main */}
               <div className="relative flex min-h-screen" style={{ zIndex: 1 }}>
                 <Sidebar />
