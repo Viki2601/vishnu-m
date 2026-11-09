@@ -2,35 +2,61 @@
 
 /**
  * Loader.jsx
- * Intro screen (≤1.5s): stacked sticky notes animate in + counter.
- * Skipped on repeat visits via sessionStorage.
+ * Intro screen shown on every visit before the page is revealed.
  * Calls onComplete() when done so the parent can unmount it.
  */
 
 import { useEffect, useRef, useState } from 'react';
-import useReducedMotion from '@/hooks/useReducedMotion';
 const NOTE_COLORS = ['#FFC2DD', '#BFFFC9', '#9BE3FF', '#FFF3B0', '#CDB4FF'];
 const NOTE_TEXTS = ['hey,', "I'm", 'Viki', '👋', '→'];
 
-export default function Loader({ onComplete }) {
+export default function Loader({ audio: initialAudio, onComplete }) {
   const overlayRef = useRef(null);
   const notesRef = useRef([]);
   const [count, setCount] = useState(0);
   const [visible, setVisible] = useState(true);
-  const reduced = useReducedMotion();
 
   useEffect(() => {
-    if (sessionStorage.getItem('viki-loaded')) {
-      onComplete?.();
-      setVisible(false);
-      return;
-    }
+    const audio = initialAudio ?? new Audio('/audio/Loading.mp3');
+    const playAudio = () => {
+      audio.play().catch((error) => {
+        if (error.name !== 'NotAllowedError') {
+          console.error('Unable to play the loading audio:', error);
+        }
+      });
+    };
+    const retryAudio = () => {
+      if (audio.paused) playAudio();
+    };
+    const stopAudio = () => {
+      window.removeEventListener('pointerdown', retryAudio);
+      window.removeEventListener('keydown', retryAudio);
+      audio.pause();
+      audio.currentTime = 0;
+    };
 
-    if (reduced) {
-      sessionStorage.setItem('viki-loaded', '1');
-      onComplete?.();
-      setVisible(false);
-      return;
+    if (audio.paused) playAudio();
+    window.addEventListener('pointerdown', retryAudio, { once: true });
+    window.addEventListener('keydown', retryAudio, { once: true });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      notesRef.current.forEach((note) => {
+        if (note) note.style.opacity = '1';
+      });
+      const progressInterval = window.setInterval(() => {
+        setCount((current) => Math.min(current + 1, 100));
+      }, 25);
+      const timeout = window.setTimeout(() => {
+        window.clearInterval(progressInterval);
+        setVisible(false);
+        onComplete?.();
+      }, 2500);
+
+      return () => {
+        window.clearInterval(progressInterval);
+        window.clearTimeout(timeout);
+        stopAudio();
+      };
     }
 
     let ctx;
@@ -38,7 +64,6 @@ export default function Loader({ onComplete }) {
       ctx = gsap.context(() => {
         const tl = gsap.timeline({
           onComplete: () => {
-            sessionStorage.setItem('viki-loaded', '1');
             gsap.to(overlayRef.current, {
               yPercent: -105,
               duration: 0.55,
@@ -51,7 +76,7 @@ export default function Loader({ onComplete }) {
         const obj = { val: 0 };
         tl.to(obj, {
           val: 100,
-          duration: 1.0,
+          duration: 2.5,
           ease: 'power1.inOut',
           onUpdate() { setCount(Math.round(obj.val)); },
         }, 0);
@@ -67,8 +92,11 @@ export default function Loader({ onComplete }) {
       });
     });
 
-    return () => ctx?.revert();
-  }, [reduced, onComplete]);
+    return () => {
+      ctx?.revert();
+      stopAudio();
+    };
+  }, [initialAudio, onComplete]);
 
   if (!visible) return null;
 

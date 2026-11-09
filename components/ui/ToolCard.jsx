@@ -26,6 +26,20 @@ const BG_Z_HOVER = -28;   // bg plate sinks back this far
 const ICON_Z_HOVER = 12;   // icon/label rises this far
 const TILT_MAX = 62;   // deg — subtle mouse-track tilt on the wrapper
 
+let toolHoverAudio;
+
+function playToolHoverSound() {
+  if (typeof Audio === 'undefined') return;
+
+  toolHoverAudio ??= new Audio('/audio/electric.mp3');
+  toolHoverAudio.currentTime = 0;
+  toolHoverAudio.play().catch((error) => {
+    if (error.name !== 'NotAllowedError') {
+      console.error('Unable to play the tool hover audio:', error);
+    }
+  });
+}
+
 async function loadIcon(iconKey) {
   try {
     const si = await import('react-icons/si');
@@ -179,7 +193,7 @@ export default function ToolCard({ name, icon: iconKey, color = '#F0EDE8' }) {
     <div
       ref={cardRef} className="tool-card" aria-label={name} title={name}
       style={{ willChange: 'transform', transformOrigin: 'center center', perspective: '400px', transformStyle: 'preserve-3d', position: 'relative', overflow: 'visible', background: 'transparent', border: 'none', boxShadow: 'none', padding: 0, }}
-      onMouseEnter={() => setHovered(true)} onMouseLeave={onMouseLeaveCard} onMouseMove={onMouseMoveCard}
+      onMouseEnter={() => { setHovered(true); playToolHoverSound(); }} onMouseLeave={onMouseLeaveCard} onMouseMove={onMouseMoveCard}
     >
       {/*
         Background plate 
